@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>User List - Jagat</title>
+	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+	    <style>
+	        * {
+	            margin: 0;
+	            padding: 0;
+	            box-sizing: border-box;
+	        }
+	        
+	        body {
+	            font-family: 'Poppins', sans-serif;
+	            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+	            min-height: 100vh;
+	            padding: 40px 20px;
+	        }
+	        
+	        .container-custom {
+	            max-width: 1200px;
+	            margin: 0 auto;
+	        }
+	        
+	        /* Header */
+	        .page-header {
+	            background: rgba(255, 255, 255, 0.2);
+	            backdrop-filter: blur(15px);
+	            border-radius: 25px;
+	            padding: 35px;
+	            margin-bottom: 40px;
+	            border: 2px solid rgba(255, 255, 255, 0.3);
+	            animation: fadeInDown 0.8s ease;
+	            box-shadow: 0 10px 30px rgba(161, 140, 209, 0.3);
+	        }
+	        
+	        @keyframes fadeInDown {
+	            from {
+	                opacity: 0;
+	                transform: translateY(-30px);
+	            }
+	            to {
+	                opacity: 1;
+	                transform: translateY(0);
+	            }
+	        }
+	        
+	        .page-header h1 {
+	            color: white;
+	            font-size: 2.8rem;
+	            font-weight: 700;
+	            margin-bottom: 10px;
+	            margin-top: 17px;
+	            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+	        }
+	        
+	        .page-header p {
+	            color: rgba(255, 255, 255, 0.95);
+	            font-size: 1.2rem;
+	            font-weight: 500;
+	        }
+	        
+	        .back-btn {
+	            background: rgba(255, 255, 255, 0.25);
+	            color: white;
+	            border: 2px solid rgba(255, 255, 255, 0.4);
+	            padding: 12px 28px;
+	            border-radius: 50px;
+	            text-decoration: none;
+	            display: inline-flex;
+	            align-items: center;
+	            gap: 10px;
+	            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	            font-weight: 600;
+	            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	            cursor: pointer;
+	        }
+	        
+	        .back-btn:hover {
+	            background: rgba(255, 255, 255, 0.4);
+	            transform: translateX(-8px) scale(1.05);
+	            color: white;
+	            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+	        }
+	        
+	        /* Search Section */
+	        .search-section {
+	            background: rgba(255, 255, 255, 0.2);
+	            backdrop-filter: blur(15px);
+	            border-radius: 25px;
+	            padding: 28px;
+	            margin-bottom: 35px;
+	            border: 2px solid rgba(255, 255, 255, 0.3);
+	            animation: fadeIn 1s ease;
+	            box-shadow: 0 10px 30px rgba(161, 140, 209, 0.15);
+	        }
+	        
+	        @keyframes fadeIn {
+	            from { opacity: 0; }
+	            to { opacity: 1; }
+	        }
+	        
+	        .search-box {
+	            position: relative;
+	        }
+	        
+	        .search-box input {
+	            width: 100%;
+	            padding: 18px 55px 18px 25px;
+	            border-radius: 50px;
+	            border: 2px solid rgba(255, 255, 255, 0.4);
+	            background: rgba(255, 255, 255, 0.95);
+	            font-size: 1.05rem;
+	            transition: all 0.3s;
+	            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+	        }
+	        
+	        .search-box input:focus {
+	            outline: none;
+	            border-color: white;
+	            box-shadow: 0 0 25px rgba(161, 140, 209, 0.6);
+	            transform: translateY(-2px);
+	        }
+	        
+	        .search-form {
+	            display: flex;
+	            gap: 15px;
+	            align-items: center;
+	        }
+	        
+	        .search-form input {
+	            flex: 1;
+	        }
+	        
+	        /* Table Section */
+	        .table-section {
+	            background: rgba(255, 255, 255, 0.2);
+	            backdrop-filter: blur(15px);
+	            border-radius: 25px;
+	            padding: 35px;
+	            border: 2px solid rgba(255, 255, 255, 0.3);
+	            animation: fadeInUp 1s ease;
+	            box-shadow: 0 10px 30px rgba(161, 140, 209, 0.3);
+	        }
+	        
+	        @keyframes fadeInUp {
+	            from {
+	                opacity: 0;
+	                transform: translateY(30px);
+	            }
+	            to {
+	                opacity: 1;
+	                transform: translateY(0);
+	            }
+	        }
+	        
+	        .table-responsive {
+	            border-radius: 18px;
+	            overflow: hidden;
+	            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+	        }
+	        
+	        table {
+	            width: 100%;
+	            background: white;
+	            border-collapse: separate;
+	            border-spacing: 0;
+	        }
+	        
+	        thead {
+	            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+	            color: white;
+	        }
+	        
+	        thead th {
+	            padding: 20px;
+	            font-weight: 600;
+	            text-transform: uppercase;
+	            font-size: 0.95rem;
+	            letter-spacing: 1.2px;
+	        }
+	        
+	        tbody tr {
+	            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	            animation: tableRowFade 0.6s ease backwards;
+	        }
+	        
+	        tbody tr:nth-child(1) { animation-delay: 0.1s; }
+	        tbody tr:nth-child(2) { animation-delay: 0.15s; }
+	        tbody tr:nth-child(3) { animation-delay: 0.2s; }
+	        tbody tr:nth-child(4) { animation-delay: 0.25s; }
+	        tbody tr:nth-child(5) { animation-delay: 0.3s; }
+	        tbody tr:nth-child(6) { animation-delay: 0.35s; }
+	        tbody tr:nth-child(7) { animation-delay: 0.4s; }
+	        tbody tr:nth-child(8) { animation-delay: 0.45s; }
+	        
+	        @keyframes tableRowFade {
+	            from {
+	                opacity: 0;
+	                transform: translateX(-30px);
+	            }
+	            to {
+	                opacity: 1;
+	                transform: translateX(0);
+	            }
+	        }
+	        
+	        tbody tr:nth-child(even) {
+	            background-color: rgba(161, 140, 209, 0.08);
+	        }
+	        
+	        tbody tr:hover {
+	            background: linear-gradient(90deg, rgba(161, 140, 209, 0.15), rgba(251, 194, 235, 0.15));
+	            transform: scale(1.02) translateX(5px);
+	            box-shadow: 0 8px 20px rgba(161, 140, 209, 0.25);
+	        }
+	        
+	        tbody td {
+	            padding: 18px 20px;
+	            border-bottom: 1px solid rgba(161, 140, 209, 0.1);
+	        }
+	        
+	        .user-name-link {
+	            color: #a18cd1;
+	            font-weight: 600;
+	            text-decoration: none;
+	            transition: all 0.3s;
+	            position: relative;
+	            display: inline-block;
+	        }
+	        
+	        .user-name-link::after {
+	            content: '';
+	            position: absolute;
+	            width: 0;
+	            height: 2px;
+	            bottom: -2px;
+	            left: 0;
+	            background: linear-gradient(90deg, #a18cd1, #fbc2eb);
+	            transition: width 0.3s;
+	        }
+	        
+	        .user-name-link:hover {
+	            color: #fbc2eb;
+	            transform: translateX(5px);
+	        }
+	        
+	        .user-name-link:hover::after {
+	            width: 100%;
+	        }
+	        
+	        .error-message {
+	            background: rgba(255, 255, 255, 0.25);
+	            color: white;
+	            padding: 25px;
+	            border-radius: 18px;
+	            margin-bottom: 20px;
+	            border: 2px solid rgba(255, 255, 255, 0.3);
+	            animation: shake 0.5s;
+	        }
+	        
+	        @keyframes shake {
+	            0%, 100% { transform: translateX(0); }
+	            25% { transform: translateX(-10px); }
+	            75% { transform: translateX(10px); }
+	        }
+	        
+	        .no-users {
+	            text-align: center;
+	            color: white;
+	            font-size: 1.2rem;
+	            padding: 40px;
+	        }
+	        
+	        /* Pagination */
+	        .pagination-section {
+	            margin-top: 35px;
+	            display: flex;
+	            justify-content: center;
+	            align-items: center;
+	            gap: 12px;
+	            flex-wrap: wrap;
+	        }
+	        
+	        .pagination-btn {
+	            background: rgba(255, 255, 255, 0.25);
+	            color: white;
+	            border: 2px solid rgba(255, 255, 255, 0.4);
+	            padding: 12px 24px;
+	            border-radius: 50px;
+	            text-decoration: none;
+	            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	            font-weight: 600;
+	            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	            display: inline-block;
+	        }
+	        
+	        .pagination-btn:hover:not(.disabled) {
+	            background: rgba(255, 255, 255, 0.4);
+	            transform: scale(1.1) translateY(-3px);
+	            color: white;
+	            box-shadow: 0 8px 20px rgba(161, 140, 209, 0.3);
+	        }
+	        
+	        .pagination-btn.active {
+	            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+	            border-color: white;
+	            box-shadow: 0 8px 25px rgba(161, 140, 209, 0.4);
+	        }
+	        
+	        .pagination-btn.disabled {
+	            opacity: 0.4;
+	            cursor: not-allowed;
+	        }
+	        
+	        @media (max-width: 768px) {
+	            .page-header h1 {
+	                font-size: 2rem;
+	            }
+	            
+	            table {
+	                font-size: 0.9rem;
+	            }
+	            
+	            thead th, tbody td {
+	                padding: 12px;
+	            }
+	            
+	            .search-form {
+	                flex-direction: column;
+	            }
+	            
+	            .search-form input {
+	                width: 100%;
+	            }
+	        }
+	    </style>
+	</head>
+<body>
+<div class="container-custom">
+    <!-- Page Header -->
+    <div class="page-header">
+        <a href="/" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        <h1>Users List - <span th:text="${memberName}">Member</span></h1>
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${error}" class="error-message" th:text="${error}"></div>
+
+    <!-- Search Form -->
+    <div class="search-section">
+        <form th:action="@{/users_JG}" method="get" class="search-form">
+            <div class="search-box">
+                <input type="text" name="search" th:value="${search}" placeholder="Search user by name or email...">
+            </div>
+            <button type="submit" class="back-btn">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </form>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-section" th:if="${users != null and #lists.size(users) > 0}">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="u : ${users}">
+                    <td th:text="${u.userId}"></td>
+                    <td>
+                        <a class="user-name-link"
+                           th:href="@{/address_JG/{name}(name=${u.name})}"
+                           th:text="${u.name}"></a>
+                    </td>
+                    <td th:text="${u.email}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- No Users Found -->
+    <div class="table-section" th:if="${users == null or #lists.size(users) == 0}">
+        <div class="no-users">
+            <i class="fas fa-users-slash" style="font-size: 3rem; margin-bottom: 20px;"></i>
+            <p>No users found.</p>
+        </div>
+    </div>
+
+    <!-- Pagination Section (Show only 5 page numbers at a time) -->
+    <div class="pagination-section" th:if="${totalPages > 1}">
+        <!-- Previous Button -->
+        <a th:if="${currentPage > 1}"
+           th:href="@{/users_JG(page=${currentPage - 1}, search=${search})}"
+           class="pagination-btn">
+            <i class="fas fa-chevron-left"></i> Previous
+        </a>
+        <span th:if="${currentPage == 1}" class="pagination-btn disabled">
+            <i class="fas fa-chevron-left"></i> Previous
+        </span>
+
+        <!-- Page Numbers (Show only 5 at a time) -->
+        <th:block th:with="startPage=${currentPage <= 3 ? 1 : (currentPage >= totalPages - 2 ? (totalPages - 4 > 0 ? totalPages - 4 : 1) : currentPage - 2)},
+                           endPage=${startPage + 4 <= totalPages ? startPage + 4 : totalPages}">
+            
+            <!-- First page if not visible -->
+            <span th:if="${startPage > 1}">
+                <a th:href="@{/users_JG(page=1, search=${search})}" class="pagination-btn">1</a>
+                <span th:if="${startPage > 2}" style="color: white; padding: 0 10px;">...</span>
+            </span>
+            
+            <!-- Page number buttons -->
+            <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                <a th:href="@{/users_JG(page=${i}, search=${search})}"
+                   th:text="${i}"
+                   th:class="${i == currentPage} ? 'pagination-btn active' : 'pagination-btn'"></a>
+            </span>
+            
+            <!-- Last page if not visible -->
+            <span th:if="${endPage < totalPages}">
+                <span th:if="${endPage < totalPages - 1}" style="color: white; padding: 0 10px;">...</span>
+                <a th:href="@{/users_JG(page=${totalPages}, search=${search})}" 
+                   th:text="${totalPages}"
+                   class="pagination-btn"></a>
+            </span>
+        </th:block>
+
+        <!-- Next Button -->
+        <a th:if="${currentPage < totalPages}"
+           th:href="@{/users_JG(page=${currentPage + 1}, search=${search})}"
+           class="pagination-btn">
+            Next <i class="fas fa-chevron-right"></i>
+        </a>
+        <span th:if="${currentPage == totalPages}" class="pagination-btn disabled">
+            Next <i class="fas fa-chevron-right"></i>
+        </span>
+    </div>
+</div>
+</body>
+</html>

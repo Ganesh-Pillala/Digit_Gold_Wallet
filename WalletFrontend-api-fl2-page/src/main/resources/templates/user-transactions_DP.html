@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History - Deepika</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffeef3 50%, #fff0f5 100%);
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+        
+        .container-custom {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        /* Back Button - Top Left */
+        .back-btn {
+            background: linear-gradient(135deg, #ffb6c1 0%, #ff9eb5 100%);
+            color: white;
+            border: none;
+            padding: 12px 26px;
+            border-radius: 16px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+            margin-bottom: 25px;
+            animation: slideInLeft 0.8s ease;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .back-btn:hover {
+            transform: translateX(-5px) scale(1.05);
+            box-shadow: 0 6px 25px rgba(255, 182, 193, 0.5);
+            color: white;
+        }
+        
+        .back-btn i {
+            transition: transform 0.3s ease;
+        }
+        
+        .back-btn:hover i {
+            transform: translateX(-5px);
+        }
+        
+        /* Header Section */
+        .header-section {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 40px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.1);
+            text-align: center;
+            animation: slideDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid rgba(255, 182, 193, 0.15);
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header-section h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            display: inline-block;
+        }
+        
+        .sparkle {
+            font-size: 1.5rem;
+            animation: sparkle 2s infinite;
+            margin: 0 10px;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        .username-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffe0e9 0%, #ffd4e0 100%);
+            color: #c44569;
+            padding: 8px 20px;
+            border-radius: 15px;
+            margin-top: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 2px solid rgba(255, 107, 157, 0.2);
+        }
+        
+        /* Transaction Stats */
+        .stats-box {
+            background: linear-gradient(135deg, #ffe0e9 0%, #ffd4e0 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid rgba(255, 107, 157, 0.2);
+            animation: fadeInScale 0.8s ease;
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .stats-box i {
+            font-size: 2rem;
+            color: #ff6b9d;
+        }
+        
+        .stats-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #c44569;
+        }
+        
+        /* Table Section */
+        .table-section {
+            background: white;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.1);
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid rgba(255, 182, 193, 0.15);
+            overflow: hidden;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 182, 193, 0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, #ffe0e9 0%, #ffd4e0 100%);
+        }
+        
+        thead th {
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #c44569;
+            border-bottom: 2px solid rgba(255, 182, 193, 0.3);
+        }
+        
+        tbody tr {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: rowFadeIn 0.5s ease backwards;
+        }
+        
+        tbody tr:nth-child(1) { animation-delay: 0.1s; }
+        tbody tr:nth-child(2) { animation-delay: 0.15s; }
+        tbody tr:nth-child(3) { animation-delay: 0.2s; }
+        tbody tr:nth-child(4) { animation-delay: 0.25s; }
+        tbody tr:nth-child(5) { animation-delay: 0.3s; }
+        tbody tr:nth-child(6) { animation-delay: 0.35s; }
+        tbody tr:nth-child(7) { animation-delay: 0.4s; }
+        tbody tr:nth-child(8) { animation-delay: 0.45s; }
+        tbody tr:nth-child(9) { animation-delay: 0.5s; }
+        tbody tr:nth-child(10) { animation-delay: 0.55s; }
+        
+        @keyframes rowFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        tbody tr:nth-child(even) {
+            background: rgba(255, 182, 193, 0.03);
+        }
+        
+        tbody tr:hover {
+            background: linear-gradient(90deg, rgba(255, 182, 193, 0.08), rgba(255, 158, 181, 0.08));
+            transform: translateX(5px) scale(1.01);
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.15);
+        }
+        
+        tbody td {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255, 182, 193, 0.1);
+            color: #555;
+            font-size: 0.95rem;
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .status-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+        
+        .status-pending {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+        }
+        
+        .status-failed {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+        }
+        
+        /* Amount Badge */
+        .amount-badge {
+            background: linear-gradient(135deg, #ffe0e9 0%, #ffd4e0 100%);
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #ff6b9d;
+        }
+        
+        /* Error Message */
+        .error-message {
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffd4e0 100%);
+            color: #c44569;
+            padding: 18px 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: shake 0.5s ease;
+            font-weight: 500;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        
+        .no-transactions {
+            text-align: center;
+            padding: 60px 20px;
+            color: #ffb6c1;
+        }
+        
+        .no-transactions i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #ffd4e0;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .no-transactions p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #c44569;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-section {
+                padding: 25px 20px;
+            }
+            
+            .header-section h1 {
+                font-size: 1.8rem;
+            }
+            
+            .table-wrapper {
+                font-size: 0.85rem;
+            }
+            
+            thead th, tbody td {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-custom">
+    <!-- Back Button -->
+    <a href="/users_DP" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Users
+    </a>
+
+    <!-- Header Section -->
+    <div class="header-section">
+        <h1>
+            <span class="sparkle">✨</span>
+            Transaction History
+            <span class="sparkle">💖</span>
+        </h1>
+        <div class="username-badge" th:if="${name}">
+            <i class="fas fa-user-circle"></i> <span th:text="${name}"></span>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${error}" class="error-message">
+        <i class="fas fa-exclamation-circle" style="font-size: 1.3rem;"></i>
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Transaction Stats -->
+    <div class="stats-box" th:if="${transactions != null and !#lists.isEmpty(transactions)}">
+        <i class="fas fa-receipt"></i>
+        <span class="stats-text">
+            Total Transactions: <strong th:text="${#lists.size(transactions)}"></strong>
+        </span>
+    </div>
+
+    <!-- Transactions Table -->
+    <div class="table-section" th:if="${transactions != null and !#lists.isEmpty(transactions)}">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag" style="margin-right: 6px;"></i>Transaction ID</th>
+                        <th><i class="fas fa-sort-numeric-up" style="margin-right: 6px;"></i>Quantity</th>
+                        <th><i class="fas fa-dollar-sign" style="margin-right: 6px;"></i>Amount</th>
+                        <th><i class="fas fa-tag" style="margin-right: 6px;"></i>Type</th>
+                        <th><i class="fas fa-check-circle" style="margin-right: 6px;"></i>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="t : ${transactions}">
+                        <td><strong th:text="${t.transactionId}"></strong></td>
+                        <td th:text="${t.quantity}"></td>
+                        <td>
+                            <span class="amount-badge" th:text="${t.amount}"></span>
+                        </td>
+                        <td th:text="${t.transactionType}"></td>
+                        <td>
+                            <span class="status-badge"
+                                  th:classappend="${t.transactionStatus == 'SUCCESS' or t.transactionStatus == 'COMPLETED' or t.transactionStatus == 'Completed'} ? 'status-success' : 
+                                                 (${t.transactionStatus == 'PENDING' or t.transactionStatus == 'Pending'} ? 'status-pending' : 'status-failed')"
+                                  th:text="${t.transactionStatus}"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- No Transactions Found -->
+    <div class="table-section" th:if="${transactions == null or #lists.isEmpty(transactions)}">
+        <div class="no-transactions">
+            <i class="fas fa-heart-broken"></i>
+            <p>No transactions found for this user.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

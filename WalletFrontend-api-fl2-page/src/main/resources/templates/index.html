@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${projectName}">Digital Gold Wallet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+    <!-- Floating Particles Background -->
+    <div class="particles-bg">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Gradient Orbs -->
+    <div class="gradient-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <!-- Gold Icon Animation -->
+                <div class="gold-icon-wrapper">
+                    <div class="gold-shine"></div>
+                    <i class="fas fa-coins gold-icon"></i>
+                </div>
+                
+                <h1 class="hero-title">
+                    <span class="title-line" th:text="${projectName}">Digital Gold Wallet</span>
+                </h1>
+                
+                <p class="hero-subtitle fade-in-up" th:text="${projectTagline}">
+                    Digital Gold Wallet Management System
+                </p>
+
+                <div class="scroll-indicator">
+                    <div class="mouse">
+                        <div class="wheel"></div>
+                    </div>
+                    <span>Scroll to explore</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Our Team</span>
+                <h2 class="section-title">Meet the Minds Behind</h2>
+                <p class="section-subtitle">Brilliant people building the future of digital gold</p>
+            </div>
+
+            <div class="team-grid">
+                <!-- Team Member Card -->
+                <a th:each="member, iterStat : ${teamMembers}" 
+                   th:href="@{${member.link}}" 
+                   class="team-member-card"
+                   th:attr="data-index=${iterStat.index}">
+                    
+                    <div class="card-glow"></div>
+                    
+                    <div class="member-image-wrapper">
+                        <div class="image-border"></div>
+                        <div class="member-image">
+                            <img th:src="@{'/images/' + ${member.name.toLowerCase()} + '.jpg'}" 
+                                 th:alt="${member.name}"
+                                 th:onerror="'this.src=\'' + @{/images/default-avatar.jpg} + '\''">
+                        </div>
+                        <div class="image-overlay">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+
+                    <div class="member-info">
+                        <h3 class="member-name" th:text="${member.name}">Name</h3>
+                        <div class="member-badge">Team Member</div>
+                    </div>
+
+                    <div class="card-shine"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Team Members</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Dedication</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Innovation</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Digital Gold Wallet. Crafted with <i class="fas fa-heart"></i> by our team</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/home.js}"></script>
+</body>
+</html>

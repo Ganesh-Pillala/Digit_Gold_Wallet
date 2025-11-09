@@ -1,0 +1,51 @@
+package com.team.vendorfrontend.model;
+
+public class User_JS {
+    private Integer userId;
+    private String email;
+    private String name;
+
+    // Constructors
+    public User_JS() {
+    }
+
+    public User_JS(Integer userId, String email, String name) {
+        this.userId = userId;
+        this.email = email;
+        this.name = name;
+    }
+
+    // Getters and Setters
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User_JS{" +
+                "userId=" + userId +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
+}

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Holdings - Joshika</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+        
+        .container-custom {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        /* Back Button - Top Left */
+        .back-btn {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(74, 85, 104, 0.2);
+            margin-bottom: 25px;
+            animation: slideInLeft 0.6s ease;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .back-btn:hover {
+            background: #2d3748;
+            transform: translateX(-5px);
+            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.3);
+            color: white;
+        }
+        
+        .back-btn i {
+            transition: transform 0.3s ease;
+        }
+        
+        .back-btn:hover i {
+            transform: translateX(-3px);
+        }
+        
+        /* Header Section */
+        .header-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            animation: slideDown 0.5s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header-section h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 0;
+        }
+        
+        .header-section h1 i {
+            color: #a0aec0;
+            margin-right: 12px;
+        }
+        
+        .username-badge {
+            display: inline-block;
+            background: #f7fafc;
+            color: #4a5568;
+            padding: 8px 20px;
+            border-radius: 12px;
+            margin-top: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 1.5px solid #e2e8f0;
+        }
+        
+        /* Stats Box */
+        .stats-box {
+            background: #f7fafc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            border: 1.5px solid #e2e8f0;
+            animation: fadeInScale 0.7s ease;
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .stats-box i {
+            font-size: 1.8rem;
+            color: #4a5568;
+        }
+        
+        .stats-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        /* Table Section */
+        .table-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            animation: slideUp 0.7s ease;
+            overflow: hidden;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1.5px solid #e2e8f0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        thead {
+            background: #f7fafc;
+        }
+        
+        thead th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        tbody tr {
+            transition: all 0.2s ease;
+            animation: rowFadeIn 0.5s ease backwards;
+        }
+        
+        tbody tr:nth-child(1) { animation-delay: 0.1s; }
+        tbody tr:nth-child(2) { animation-delay: 0.15s; }
+        tbody tr:nth-child(3) { animation-delay: 0.2s; }
+        tbody tr:nth-child(4) { animation-delay: 0.25s; }
+        tbody tr:nth-child(5) { animation-delay: 0.3s; }
+        tbody tr:nth-child(6) { animation-delay: 0.35s; }
+        tbody tr:nth-child(7) { animation-delay: 0.4s; }
+        tbody tr:nth-child(8) { animation-delay: 0.45s; }
+        tbody tr:nth-child(9) { animation-delay: 0.5s; }
+        tbody tr:nth-child(10) { animation-delay: 0.55s; }
+        
+        @keyframes rowFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+        
+        tbody td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f3f5;
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Quantity Badge */
+        .quantity-badge {
+            background: #f7fafc;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            color: #4a5568;
+            border: 1.5px solid #e2e8f0;
+            display: inline-block;
+        }
+        
+        /* Error Message */
+        .error-message {
+            background: #fff5f5;
+            color: #c53030;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1.5px solid #feb2b2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .no-holdings {
+            text-align: center;
+            padding: 50px 20px;
+            color: #718096;
+        }
+        
+        .no-holdings i {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #cbd5e0;
+            animation: float 2s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .no-holdings p {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-section {
+                padding: 25px 20px;
+            }
+            
+            .header-section h1 {
+                font-size: 1.6rem;
+            }
+            
+            .table-wrapper {
+                font-size: 0.85rem;
+            }
+            
+            thead th, tbody td {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-custom">
+    <!-- Back Button -->
+    <a href="/users_JS" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Users
+    </a>
+
+    <!-- Header Section -->
+    <div class="header-section">
+        <h1>
+            <i class="fas fa-box-open"></i>
+            Holdings Details
+        </h1>
+        <div class="username-badge" th:if="${name}">
+            <i class="fas fa-user-circle"></i> <span th:text="${name}"></span>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${error}" class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Holdings Stats -->
+    <div class="stats-box" th:if="${holdings != null and #arrays.length(holdings) > 0}">
+        <i class="fas fa-cubes"></i>
+        <span class="stats-text">
+            Total Holdings: <strong th:text="${#arrays.length(holdings)}"></strong>
+        </span>
+    </div>
+
+    <!-- Holdings Table -->
+    <div class="table-section" th:if="${holdings != null and #arrays.length(holdings) > 0}">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag" style="margin-right: 6px;"></i>Holding ID</th>
+                        <th><i class="fas fa-code-branch" style="margin-right: 6px;"></i>Branch ID</th>
+                        <th><i class="fas fa-weight" style="margin-right: 6px;"></i>Quantity (grams)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="h : ${holdings}">
+                        <td><strong th:text="${h.holdingId}"></strong></td>
+                        <td th:text="${h.branchId}"></td>
+                        <td>
+                            <span class="quantity-badge">
+                                <span th:text="${h.quantity}"></span> g
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- No Holdings Found -->
+    <div class="table-section" th:if="${holdings == null or #arrays.length(holdings) == 0}">
+        <div class="no-holdings">
+            <i class="fas fa-box-open"></i>
+            <p>No holdings found for this user.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
